@@ -2,18 +2,15 @@ package VkApi.service;
 
 
 import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.HttpClientBuilder;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
 
@@ -21,9 +18,8 @@ import java.util.concurrent.TimeUnit;
 public class ApacheHTTPClientImpl implements  ApacheHTTPClient {
 
 
-    @Async
     @Override
-    public Future<String> getApacheHTTPClient(String mainKeyword, String token) {
+    public String getApacheHTTPClient(String mainKeyword, String token) {
 
         final String URL = "https://api.vk.com/method/";
         final String METHOD = "groups.search?";
@@ -69,8 +65,6 @@ public class ApacheHTTPClientImpl implements  ApacheHTTPClient {
                 stringBuilder.append(line);
             }
 
-        } catch (ClientProtocolException e) {
-            e.printStackTrace();
         } catch (UnsupportedOperationException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -78,7 +72,7 @@ public class ApacheHTTPClientImpl implements  ApacheHTTPClient {
         }
 
 
-        return new AsyncResult<>(stringBuilder.toString());
+        return stringBuilder.toString();
 
 
     }

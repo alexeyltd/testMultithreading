@@ -20,26 +20,13 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import java.util.concurrent.Executor;
 
 @SpringBootApplication
-@EnableAsync
-public class Application extends AsyncConfigurerSupport {
+public class Application {
 
     public static void main(String[] args) {
 
         SpringApplication.run(Application.class, args);
 
     }
-
-    @Override
-    public Executor getAsyncExecutor() {
-        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-        executor.setCorePoolSize(15);
-        executor.setMaxPoolSize(70);
-        executor.setQueueCapacity(500);
-        executor.setThreadNamePrefix("Searcher-");
-        executor.initialize();
-        return executor;
-    }
-
 
 
 

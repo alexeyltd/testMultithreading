@@ -6,13 +6,11 @@ import VkApi.model.RootObject;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.awt.*;
 import java.io.IOException;
-import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -21,9 +19,8 @@ public class WallSearchServiceImpl implements WallSearchService {
     private static final Logger logger = LoggerFactory.getLogger(WallSearchServiceImpl.class);
 
 
-    @Async
     @Override
-    public Future<Response> JsonWallSearch(Long owner, String query, String token) {
+    public Response JsonWallSearch(Long owner, String query, String token) {
 
         final String URL = "https://api.vk.com/method/";
         final String METHOD = "wall.search?";
@@ -37,26 +34,27 @@ public class WallSearchServiceImpl implements WallSearchService {
         RestTemplate restTemplate = new RestTemplate();
         ObjectMapper objectMapper = new ObjectMapper();
 
-        String resultAccountInfoJsonFromVkApi = restTemplate.getForObject(URL + METHOD + OWNER_ID + owner + PARAMETER_QUERY + query + COUNT + EXTENDED + TOKEN + VERSION, String.class);
+//        String resultAccountInfoJsonFromVkApi = restTemplate.getForObject(URL + METHOD + OWNER_ID + owner + PARAMETER_QUERY + query + COUNT + EXTENDED + TOKEN + VERSION, String.class);
+        RootObject rootObject = restTemplate.getForObject(URL + METHOD + OWNER_ID + owner + PARAMETER_QUERY + query + COUNT + EXTENDED + TOKEN + VERSION, RootObject.class);
 
         try {
-            TimeUnit.MILLISECONDS.sleep(700);
+            TimeUnit.MILLISECONDS.sleep(300);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
-        RootObject rootObject = null;
+//        RootObject rootObject = null;
 
 
-        try {
-            rootObject = objectMapper.readValue(resultAccountInfoJsonFromVkApi, RootObject.class);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            rootObject = objectMapper.readValue(resultAccountInfoJsonFromVkApi, RootObject.class);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 
         logger.info(Thread.currentThread().getName());
 
-        return new AsyncResult<>(rootObject.getResponse());
+        return rootObject.getResponse();
 
     }
 
